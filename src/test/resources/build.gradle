@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+    	mavenLocal()
+        jcenter()
+    	mavenCentral()
+	}
+    dependencies {
+        classpath 'com.apigee:apiproxy-plugin:1.0'
+    }
+}
+
+apply plugin: 'apiproxy'
+
+ext {
+    username = "${apigee_username}"
+    password = "${apigee_password}"
+}
+apiproxy {
+    hostURL= 'https://api.enterprise.apigee.com'
+    orgName= 'carlosfrias'
+    envName= 'test'
+    application = 'yahoo'
+    apiVersion= 'v1'
+    projectName= 'yahoo'
+    projectVersion= '1.0.0-SNAPSHOT'
+    username= username
+    password= password
+    buildDirectory= 'build'
+    baseDirectory= System.properties.'user.dir'
+    apiProxySource= 'apiproxy'
+    revision= '1'
+}
+
