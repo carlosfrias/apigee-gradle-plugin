@@ -18,7 +18,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def apiProxy = apigee.apiProxyService
+                def apiProxy = apigee.apiProxy
                 println "Api Proxy Last Revision for ${apigee.profile.organizationURL}${apigee.profile.apiProxyURL}"
                 println "Api Proxy Last Revision: ${apiProxy.lastRevision}"
             }
@@ -30,7 +30,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Create Api Proxy for ${apigee.profile.organizationURL}${project.apiproxy.application}"
                 def resp = proxy.createApiProxy
                 reportServerResponse(resp)
@@ -44,7 +44,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Delete Api Proxy for ${apigee.profile.organizationURL}${apigee.profile.application}"
                 def resp = proxy.deleteApiProxy
                 reportServerResponse(resp)
@@ -58,7 +58,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Delete Api Proxy Revision for ${apigee.profile.organizationURL}${apigee.profile.apiProxyRevisionURL}"
                 def resp = proxy.deleteApiProxyRevision
                 reportServerResponse(resp)
@@ -72,7 +72,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Export Api Proxy for ${apigee.profile.organizationURL}${apigee.profile.apiProxyRevisionURL}"
                 def resp = proxy.exportApiProxy()
                 reportServerResponse(resp)
@@ -84,7 +84,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Extracted Api Proxy for ${apigee.profile.organizationURL}${apigee.profile.apiProxyRevisionURL}"
                 def resp = proxy.extractExportApiProxy
                 println "Exported Api Proxy Extracted to: \n${resp}"
@@ -96,7 +96,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Api Proxy Listing for ${apigee.profile.organizationURL}${apigee.profile.apiProxyURL}"
                 def resp = proxy.apiProxy
                 reportServerResponse(resp)
@@ -109,7 +109,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "List of Api Proxies for ${apigee.profile.organizationApiURL}"
                 def resp = proxy.listApiProxies
                 reportServerResponse(resp)
@@ -121,7 +121,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Api Proxy Revision ${apigee.profile.revision} for ${project.apiproxy.application}"
                 def resp = proxy.apiProxyRevision
                 reportServerResponse(resp)
@@ -134,7 +134,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Deploy Api Proxy for ${project.apiproxy.application}"
                 def resp = proxy.deployApiProxy
                 reportServerResponse(resp)
@@ -149,7 +149,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 proxy.unDeployAllApiProxyRevisions
                 proxy.lastRevision
                 println "Deploy Api Proxy Revision ${apigee.profile.revision} for ${project.apiproxy.application}"
@@ -164,7 +164,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Undeploy All Api Proxy Revisions for ${project.apiproxy.application}"
                 def apiProxyResp = proxy.unDeployAllApiProxyRevisions
                 println "Undeployed All Api Proxy Revisions."
@@ -177,14 +177,13 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Create Api Proxy Zip for ${apigee.profile.apiProxyZipFilename}"
                 def resp = proxy.createApiProxyZip()
                 println "Api Proxy Zip Created to: $resp"
             }
         }
-        project.task('i' +
-                'mportApiProxy') {
+        project.task('importApiProxy') {
             group 'Api Proxy Execution Manual Service Invocations'
             description ''' Uploads a ZIP-formatted API proxy configuration bundle from a local machine to
                             an organization on Edge. If the API proxy already exists, then create a new
@@ -192,7 +191,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 proxy.createApiProxyZip()
                 println "Import Api Proxy for ${project.apiproxy.application}"
                 def resp = proxy.importApiProxy()
@@ -206,8 +205,8 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
-                proxy.exportAllApiProxy
+                def proxy = apigee.apiProxy
+                proxy.exportAllApiProxyRevisions
             }
         }
 
@@ -217,7 +216,7 @@ public class ApiProxyPlugin implements Plugin<Project> {
 
             doLast {
                 def apigee = new Apigee(profile: getApigeeProfile(project))
-                def proxy = apigee.apiProxyService
+                def proxy = apigee.apiProxy
                 println "Reploying Api Proxy ${apigee.profile.application}"
                 reportServerResponse proxy.redeployApiProxy()
                 println "Api Proxy Deployment Process Complete."
